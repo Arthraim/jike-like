@@ -5,8 +5,31 @@ class JikeComponent extends React.Component {
   render() {
     const { text } = this.props
     return (
-      <div>{ text }</div>
+      <div style={this._style().div}>
+        <span style={this._style().span}>{ text }</span>
+      </div>
     )
+  }
+
+  _style() {
+    return {
+      div: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 512,
+        height: 512,
+        background: '#fddf13',
+        background: 'linear-gradient(135deg, #fddf13 0%,#fddf13 30%,#fdc413 100%)',
+      },
+      span: {
+        lineHeight: '512px',
+        fontFamily: 'Avenir',
+        fontSize: 400,
+        color: '#FFFFFF',
+        textShadow: '20px 15px #5EC1FA'
+      },
+    }
   }
 }
 
