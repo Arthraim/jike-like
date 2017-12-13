@@ -1,7 +1,9 @@
 {
   "dependencies": {
+    "konva": "^1.7.6",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-konva": "^1.6.4",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2"
   },
