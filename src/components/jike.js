@@ -7,16 +7,20 @@ class JikeComponent extends React.Component {
   render() {
     const { text, onTextChange } = this.props
     return (
-      <div>
-        <input type="Text"
+      <div style={this.styles().wrapper}>
+        <h1>JIKE-LIKE</h1>
+        1. 在下面输入框中输入字符（逻辑简单，字符太多会大笨蛋）
+        <input style={this.styles().input}
+               type="Text"
                defaultValue={text}
                onChange={onTextChange} />
-        <div>{ this.renderCanvas() }</div>
+        2. 然后随意保存这个图
+        <div calss="stage">{ this.renderStage() }</div>
       </div>
     )
   }
 
-  renderCanvas() {
+  renderStage() {
     const { text } = this.props
     return (
       <Stage width={512} height={512}>
@@ -46,6 +50,28 @@ class JikeComponent extends React.Component {
         </Layer>
       </Stage>
     )
+  }
+
+  styles() {
+    return {
+      wrapper: {
+        display: 'flex',
+        width: 512,
+        flexDirection: 'column',
+      },
+      input: {
+        borderRadius: 5,
+        border: '1px solid #ddd',
+        padding: '5px 10px',
+        margin: '10px 0',
+        lineHeight: 2,
+        textAlign: 'center',
+        background: 'transparent',
+        outline: 'none',
+        appearance: 'none',
+        fontSize: 20,
+      },
+    }
   }
 }
 
