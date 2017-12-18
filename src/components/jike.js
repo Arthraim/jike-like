@@ -1,9 +1,22 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Stage, Layer, Rect, Text } from 'react-konva'
+import { changeTextAction } from '../reducers/textReducer'
 
 class JikeComponent extends React.Component {
   render() {
+    const { text, onTextChange } = this.props
+    return (
+      <div>
+        <input type="Text"
+               defaultValue={text}
+               onChange={onTextChange} />
+        <div>{ this.renderCanvas() }</div>
+      </div>
+    )
+  }
+
+  renderCanvas() {
     const { text } = this.props
     return (
       <Stage width={512} height={512}>
@@ -21,7 +34,7 @@ class JikeComponent extends React.Component {
             width={512}
             height={512}
             offsetY={-(512-400)/2}
-            text="J"
+            text={text}
             fill="#FFFFFF"
             align="center"
             fontSize={400}
@@ -43,7 +56,11 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch: any) {
-  return {}
+  return {
+    onTextChange: (event) => {
+      dispatch(changeTextAction(event.target.value))
+    }
+  }
 }
 
 export let Jike = connect(mapStateToProps, mapDispatchToProps)(JikeComponent)
