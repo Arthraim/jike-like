@@ -1,11 +1,28 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Stage, Layer, Rect, Text } from 'react-konva'
-import { changeTextAction } from '../reducers/textReducer'
+import { changeTextAction, changeImgAction } from '../reducers/textReducer'
 
 class JikeComponent extends React.Component {
+
+  componentDidMount() {
+    this.props.onImgChange(this.getDataUrl())
+  }
+
+  componentDidUpdate() {
+    // TODO: konva的文档中没有找到如何在stage绘制完成后响应，暂时这样处理
+    setTimeout(
+      () => this.props.onImgChange(this.getDataUrl()), 
+      100
+    )
+  }
+
+  getDataUrl() {
+    return this.refs.stage._stage.toDataURL()
+  }
+
   render() {
-    const { text, onTextChange } = this.props
+    const { text, img, onTextChange } = this.props
     return (
       <div style={this.styles().wrapper}>
         <h1>JIKE-LIKE</h1>
@@ -16,6 +33,7 @@ class JikeComponent extends React.Component {
                onChange={onTextChange} />
         2. 然后随意保存这个图
         <div calss="stage">{ this.renderStage() }</div>
+        <img style={this.styles().output} src={img} />
       </div>
     )
   }
@@ -23,7 +41,7 @@ class JikeComponent extends React.Component {
   renderStage() {
     const { text } = this.props
     return (
-      <Stage width={512} height={512}>
+      <Stage width={512} height={512} ref={'stage'} style={this.styles().stage}>
         <Layer>
           <Rect
             x={0}
@@ -56,7 +74,11 @@ class JikeComponent extends React.Component {
     return {
       wrapper: {
         display: 'flex',
-        width: 512,
+        boxSizing: 'border-box',
+        width: '100%',
+        maxWidth: 512,
+        padding: 10,
+        margin: 'auto',
         flexDirection: 'column',
       },
       input: {
@@ -71,6 +93,12 @@ class JikeComponent extends React.Component {
         appearance: 'none',
         fontSize: 20,
       },
+      stage: {
+        display: 'none'
+      },
+      output: {
+        width: '100%'
+      }
     }
   }
 }
@@ -78,6 +106,7 @@ class JikeComponent extends React.Component {
 function mapStateToProps(state) {
   return {
     text: state.text.content,
+    img: state.img.content
   }
 }
 
@@ -85,6 +114,10 @@ function mapDispatchToProps(dispatch: any) {
   return {
     onTextChange: (event) => {
       dispatch(changeTextAction(event.target.value))
+    },
+
+    onImgChange: (img) => {
+      dispatch(changeImgAction(img))
     }
   }
 }
