@@ -48,7 +48,9 @@ class JikeComponent extends React.Component {
             y={0}
             width={512}
             height={512}
-            fill={'#FDDF13'}
+            fillLinearGradientStartPoint={{ x: 512, y: 512}}
+            fillLinearGradientEndPoint={{ x: 0, y: 0}}
+            fillLinearGradientColorStops={[0, '#FECB11', 1, '#FFE411']}
           />
           <Text
             x={0}
