@@ -1,4 +1,8 @@
 {
+  "scripts":{
+    "start": "parcel index.html",
+    "dist": "parcel build index.html -d ../dist"
+  },
   "dependencies": {
     "konva": "^1.7.6",
     "react": "^16.2.0",
