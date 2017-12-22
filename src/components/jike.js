@@ -53,37 +53,31 @@ class JikeComponent extends React.Component {
             fillLinearGradientEndPoint={{ x: 0, y: 0}}
             fillLinearGradientColorStops={[0, '#FECB11', 1, '#FFE411']}
           />
-          { this.renderShadow(text, 20, 15) }
-          <Text
-            x={0}
-            y={0}
-            width={512}
-            height={512}
-            offsetY={-(512-400)/2}
-            text={text}
-            fill="#FFFFFF"
-            align="center"
-            fontSize={400}
-          />
+          { this.renderText(text, 20, 15) }
         </Layer>
       </Stage>
     )
   }
 
-  renderShadow(text, offsetX, offsetY) {
+  renderText(text, offsetX, offsetY) {
     const bigger = Math.max(offsetX, offsetY)
     return _.times(bigger, (n) => {
+      const x = offsetX * n / bigger
+      const y = offsetY * n / bigger
       return <Text
         x={0}
         y={0}
         width={512}
         height={512}
-        offsetX={-offsetX * n / bigger}
-        offsetY={-(512 - 400) / 2 - offsetX * n / bigger }
+        offsetY={-(512-400)/2}
         text={text}
-        fill="#5EC1FA"
+        fill="#FFFFFF"
         align="center"
         fontSize={400}
+        shadowColor="#5EC1FA"
+        shadowOffset={{x, y}}
+        shadowBlur={0}
+        shadowOpacity={1.0}
       />
     })
   }
