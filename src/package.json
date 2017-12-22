@@ -1,10 +1,11 @@
 {
-  "scripts":{
+  "scripts": {
     "start": "parcel index.html",
     "dist": "parcel build index.html -d ../dist"
   },
   "dependencies": {
     "konva": "^1.7.6",
+    "lodash": "^4.17.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-konva": "^1.6.4",

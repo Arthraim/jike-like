@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Stage, Layer, Rect, Text } from 'react-konva'
+import { _ } from 'lodash'
 import { changeTextAction, changeImgAction } from '../reducers/textReducer'
 
 class JikeComponent extends React.Component {
@@ -52,6 +53,7 @@ class JikeComponent extends React.Component {
             fillLinearGradientEndPoint={{ x: 0, y: 0}}
             fillLinearGradientColorStops={[0, '#FECB11', 1, '#FFE411']}
           />
+          { this.renderShadow(text, 20, 15) }
           <Text
             x={0}
             y={0}
@@ -62,14 +64,28 @@ class JikeComponent extends React.Component {
             fill="#FFFFFF"
             align="center"
             fontSize={400}
-            shadowColor='#5EC1FA'
-            shadowOffset={{x: 20, y: 15}}
-            shadowBlur={0}
-            shadowOpacity={1.0}
           />
         </Layer>
       </Stage>
     )
+  }
+
+  renderShadow(text, offsetX, offsetY) {
+    const bigger = Math.max(offsetX, offsetY)
+    return _.times(bigger, (n) => {
+      return <Text
+        x={0}
+        y={0}
+        width={512}
+        height={512}
+        offsetX={-offsetX * n / bigger}
+        offsetY={-(512 - 400) / 2 - offsetX * n / bigger }
+        text={text}
+        fill="#5EC1FA"
+        align="center"
+        fontSize={400}
+      />
+    })
   }
 
   styles() {
