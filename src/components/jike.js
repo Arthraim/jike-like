@@ -13,7 +13,7 @@ class JikeComponent extends React.Component {
   componentDidUpdate() {
     // TODO: konva的文档中没有找到如何在stage绘制完成后响应，暂时这样处理
     setTimeout(
-      () => this.props.onImgChange(this.getDataUrl()), 
+      () => this.props.onImgChange(this.getDataUrl()),
       100
     )
   }
@@ -61,6 +61,7 @@ class JikeComponent extends React.Component {
 
   renderText(text, offsetX, offsetY) {
     const bigger = Math.max(offsetX, offsetY)
+    const fontSize = this.calculateFontSize(text)
     return _.times(bigger, (n) => {
       const x = offsetX * n / bigger
       const y = offsetY * n / bigger
@@ -69,17 +70,42 @@ class JikeComponent extends React.Component {
         y={0}
         width={512}
         height={512}
-        offsetY={-(512-400)/2}
+        offsetY={- (512 - fontSize) / 2}
         text={text}
         fill="#FFFFFF"
         align="center"
-        fontSize={400}
+        fontSize={fontSize}
+        fontFamily={'menlo, Roboto Mono, Courier New, Courier'}
         shadowColor="#5EC1FA"
         shadowOffset={{x, y}}
         shadowBlur={0}
         shadowOpacity={1.0}
       />
     })
+  }
+
+  calculateFontSize(text) {
+    const REGEX = /[a-zA-z]/g
+    const ONE_CHAR = 400
+
+    const totalCount = text.length
+    if (totalCount <= 1) {
+      return ONE_CHAR
+    }
+
+    const matches = text.match(REGEX)
+    const thinCharCount = (matches && matches.length > 0) ? matches.length : 0
+    const wideCharCount = totalCount - thinCharCount
+
+    console.log(matches)
+
+    // Assume thin is 1:2, wide is 2:2
+    // ---------
+    // |  |    |
+    // ---------
+
+    const ratio = 1.8
+    return ONE_CHAR / (thinCharCount + wideCharCount * ratio) * ratio
   }
 
   styles() {
