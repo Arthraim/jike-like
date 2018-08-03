@@ -3,6 +3,10 @@ import { connect } from 'react-redux'
 import { Stage, Layer, Rect, Text } from 'react-konva'
 import { _ } from 'lodash'
 import { changeTextAction, changeImgAction } from '../reducers/textReducer'
+import { JikeOpenJsSDK } from '@ruguoapp/jike-open-js-sdk'
+
+const ONE_CHAR_HEIGHT = 400
+const jikeSDK = new JikeOpenJsSDK('')
 
 class JikeComponent extends React.Component {
 
@@ -23,11 +27,14 @@ class JikeComponent extends React.Component {
   }
 
   render() {
-    const { text, img, onTextChange } = this.props
+    const { text, img, onTextChange, onJikeUserinfo } = this.props
     return (
       <div style={this.styles().wrapper}>
         <h1>JIKE-LIKE</h1>
-        1. 在下面输入框中输入字符（逻辑简单，字符太多会大笨蛋）
+        <span>1. 在下面输入框中输入字符（逻辑简单，字符太多会大笨蛋）</span>
+        <br />
+        { jikeSDK.isInJikeApp() &&
+        <span>或者 <a href="javascript:void(0);" onClick={() => { onJikeUserinfo() }}>直接使用即刻用户名</a></span>}
         <input style={this.styles().input}
                type="Text"
                defaultValue={text}
@@ -62,9 +69,10 @@ class JikeComponent extends React.Component {
   renderText(text, offsetX, offsetY) {
     const bigger = Math.max(offsetX, offsetY)
     const fontSize = this.calculateFontSize(text)
+    const offsetRatio = fontSize * 2 / ONE_CHAR_HEIGHT
     return _.times(bigger, (n) => {
-      const x = offsetX * n / bigger
-      const y = offsetY * n / bigger
+      const x = offsetX * n / bigger * offsetRatio
+      const y = offsetY * n / bigger * offsetRatio
       return <Text
         x={0}
         y={0}
@@ -86,18 +94,15 @@ class JikeComponent extends React.Component {
 
   calculateFontSize(text) {
     const REGEX = /[a-zA-z]/g
-    const ONE_CHAR = 400
 
     const totalCount = text.length
     if (totalCount <= 1) {
-      return ONE_CHAR
+      return ONE_CHAR_HEIGHT
     }
 
     const matches = text.match(REGEX)
     const thinCharCount = (matches && matches.length > 0) ? matches.length : 0
     const wideCharCount = totalCount - thinCharCount
-
-    console.log(matches)
 
     // Assume thin is 1:2, wide is 2:2
     // ---------
@@ -105,7 +110,7 @@ class JikeComponent extends React.Component {
     // ---------
 
     const ratio = 1.8
-    return ONE_CHAR / (thinCharCount + wideCharCount * ratio) * ratio
+    return ONE_CHAR_HEIGHT / (thinCharCount + wideCharCount * ratio) * ratio
   }
 
   styles() {
@@ -156,7 +161,14 @@ function mapDispatchToProps(dispatch: any) {
 
     onImgChange: (img) => {
       dispatch(changeImgAction(img))
-    }
+    },
+
+    onJikeUserinfo: () => {
+      jikeSDK.getUserInfo().then((result) => {
+        const screenname = result.user.screenName
+        dispatch(changeTextAction(screenname))
+      })
+    },
   }
 }
 
