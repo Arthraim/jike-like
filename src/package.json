@@ -4,14 +4,14 @@
     "dist": "parcel build index.html -d ../dist"
   },
   "dependencies": {
+    "@ruguoapp/jike-open-js-sdk": "0.0.9",
     "konva": "^1.7.6",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-konva": "^1.6.4",
     "react-redux": "^5.0.6",
-    "redux": "^3.7.2",
-    "@ruguoapp/jike-open-js-sdk": "0.0.9"
+    "redux": "^3.7.2"
   },
   "devDependencies": {
     "babel-preset-env": "^1.6.1",
